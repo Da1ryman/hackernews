@@ -5,19 +5,19 @@ import { Provider } from 'react-redux'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MainPage from './screen/main/MainPage';
-// import store from './store';
+import store from './store/store';
+import NewsPage from './screen/news/NewsPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    {/* <Provider store={store}> */}
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainPage/>}/>
-          <Route path="/news/:name" element={<>News page</>}/>
+          <Route path="/news/:id" element={<NewsPage/>}/>
         </Routes>
       </BrowserRouter>
-    {/* </Provider> */}
-    
+    </Provider>
   </React.StrictMode>
 );
