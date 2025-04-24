@@ -2,7 +2,7 @@ import { ListGroup } from "react-bootstrap";
 import { CommentItem } from "./CommentItem";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchComment } from "../../store/slice";
+import { fetchComment, removeComment } from "../../store/slice";
 import { useEffect } from "react";
 
 export const CommentList = () => {
@@ -11,7 +11,10 @@ export const CommentList = () => {
 
   useEffect(() => {
     dispatch(fetchComment(params));
-  }, [dispatch]);
+    return () => {
+        dispatch(removeComment())
+    }
+  }, [dispatch, params]);
 
   return (
     <>

@@ -49,18 +49,14 @@ export const fetchComment = createAsyncThunk(
 
 export const fetchCommentTree = createAsyncThunk(
   "comment/fetchCommentTree",
-  async (id) => {
+  async ({ parent, kids }) => {
     try {
-      const comment = await getComment(id);
-      if (!comment.kids) {
-        return [];
-      }
       const comments = await Promise.all(
-        comment.kids.map((commentId) => getComment(commentId))
+        kids.map((commentId) => getComment(commentId))
       );
-      return comments;
+      return { parent, comments };
     } catch (err) {
-      return err;
+      return { parent, comments: [] };
     }
   }
 );
@@ -128,13 +124,17 @@ const commentSlice = createSlice({
       });
 
     builder.addCase(fetchCommentTree.fulfilled, (state, action) => {
-      if (action.payload) {
-        const { parent } = action.payload[0];
+      const { parent, comments } = action.payload;
+
+      state.commentsTree = state.commentsTree.filter(
+        (tree) => tree.parent !== parent
+      );
+
+      if (comments && comments.length > 0) {
         state.commentsTree.push({
-          id: parent,
-          comments: action.payload,
+          parent,
+          comments,
         });
-        state.commentsTree = action.payload;
       }
     });
   },
