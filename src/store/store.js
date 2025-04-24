@@ -1,10 +1,9 @@
-import { configureStore } from '@reduxjs/toolkit'
-import newsReducer from './newsSlice'
-import commentReducer from './commentSlice'
+import { configureStore } from "@reduxjs/toolkit";
+import { newsReducer, commentReducer } from "./slice";
 
 export default configureStore({
-    reducer: {
-        news: newsReducer,
-        comment: commentReducer,
-    }
-})
+  reducer: {
+    news: newsReducer,
+    comment: commentReducer,
+  },
+});
