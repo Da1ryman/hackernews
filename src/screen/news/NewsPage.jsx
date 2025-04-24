@@ -14,7 +14,7 @@ export const NewsPage = () => {
 
   useEffect(() => {
     dispatch(fetchNewsDetail(id));
-  }, []);
+  }, [dispatch]);
 
   return (
     <Container className="mt-4">

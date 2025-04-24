@@ -112,8 +112,10 @@ const commentSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchComment.fulfilled, (state, action) => {
-        state.comments = action.payload;
-        state.loading = false;
+        if (action.payload) {
+          state.comments = action.payload;
+          state.loading = false;
+        }
       })
       .addCase(fetchComment.pending, (state) => {
         if (!state.comments) {

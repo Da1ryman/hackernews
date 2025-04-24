@@ -9,7 +9,6 @@ export const NewsList = () => {
     const reloadNews = () => dispatch(fetchNews())
 
   useEffect(() => {
-    reloadNews()
     const interval = setInterval(() => {
         reloadNews();
     }, 60000);

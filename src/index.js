@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import { MainPage } from "./screen/main/MainPage";
-import store from "./store/store";
+import { store } from "./store/store";
 import { NewsPage } from "./screen/news/NewsPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

@@ -5,14 +5,16 @@ import { Loading } from "../another/Loading";
 
 export const CommentItem = () => {
   const dispatch = useDispatch();
-  const { comments, loading } = useSelector(
-    (state) => state.comment
-  );
+  const { comments, loading } = useSelector((state) => state.comment);
 
   return (
     <>
       {!loading ? (
-        !comments ? (
+        !comments[0] ? (
+          <div className="d-flex justify-content-center m-5">
+            <p>Комментариев нет</p>
+          </div>
+        ) : (
           comments.map((comment) => (
             <>
               <ListGroup.Item key={comment.id} className="p-0">
@@ -27,12 +29,9 @@ export const CommentItem = () => {
                   </Button>
                 </div>
               </ListGroup.Item>
+              {/* {!comm} */}
             </>
           ))
-        ) : (
-          <div className="d-flex justify-content-center m-5">
-            <p>Комментариев нет</p>
-          </div>
         )
       ) : (
         <div className="d-flex justify-content-center m-5">
