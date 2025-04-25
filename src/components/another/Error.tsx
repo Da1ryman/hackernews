@@ -1,4 +1,4 @@
-export const Error = () => (
+export const Error: React.FC = () => (
     <div className="text-center">
         <h2>
             Ошибка в получении данных

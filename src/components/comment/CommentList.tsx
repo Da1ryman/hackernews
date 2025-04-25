@@ -1,27 +1,28 @@
 import { ListGroup } from "react-bootstrap";
 import { CommentItem } from "./CommentItem";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchComment, removeComment } from "../../store/slice";
 import { useEffect } from "react";
 import { Error } from "../another/Error";
+import { RootState, useAppDispatch } from "../../store/store";
 
-export const CommentList = () => {
-  const params = useParams().id;
-  const dispatch = useDispatch();
-  const { error } = useSelector((state) => state.comment);
+export const CommentList: React.FC = () => {
+  const id = useParams().id;
+  const dispatch = useAppDispatch();
+  const { error, comments } = useSelector((state: RootState) => state.comment);
 
   useEffect(() => {
-    dispatch(fetchComment(params));
+    dispatch(fetchComment(String(id)));
     return () => {
       dispatch(removeComment());
     };
-  }, [dispatch, params]);
+  }, [dispatch, id]);
 
   return (
     <>
-      <div className="d-flex justify-content-center m-5">
-        <h2 className="mt-4">Комментарии</h2>
+      <div className="d-flex m-2">
+        <h2 className="mt-4">Комментарии {comments ? comments.length : null}</h2>
       </div>
       {!error ? (
         <ListGroup>

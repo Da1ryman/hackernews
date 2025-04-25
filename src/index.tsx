@@ -8,7 +8,11 @@ import { MainPage } from "./screen/main/MainPage";
 import { store } from "./store/store";
 import { NewsPage } from "./screen/news/NewsPage";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const rootElement = document.getElementById('root')
+
+if(!rootElement) throw new Error('Root element not found')
+
+const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
     <Provider store={store}>

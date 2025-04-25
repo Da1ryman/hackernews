@@ -1,11 +1,13 @@
 import { Button, ListGroup } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { fetchCommentTree } from "../../store/slice";
 import { Loading } from "../another/Loading";
+import { Comment, CommentItemProps } from "../../types/comment";
+import { RootState, useAppDispatch } from "../../store/store";
 
-export const CommentItem = ({ parentId, depth = 0 }) => {
-  const dispatch = useDispatch();
-  const { comments, loading, commentsTree } = useSelector((state) => state.comment);
+export const CommentItem: React.FC<CommentItemProps> = ({ parentId, depth = 0 }) => {
+  const dispatch = useAppDispatch();
+  const { comments, loading, commentsTree } = useSelector((state: RootState) => state.comment);
   
   const currentComments = parentId 
     ? commentsTree.find(tree => tree.parent === parentId)?.comments || []
@@ -29,7 +31,7 @@ export const CommentItem = ({ parentId, depth = 0 }) => {
 
   return (
     <>
-      {currentComments.map((comment) => (
+      {currentComments.map((comment: Comment) => (
         <div key={comment.id} style={{ marginLeft: `${depth * 20}px` }}>
           <ListGroup.Item className="p-0 mb-2">
             <p className="p-3">{comment.text}</p>
@@ -42,7 +44,7 @@ export const CommentItem = ({ parentId, depth = 0 }) => {
                 <Button
                   onClick={() => dispatch(fetchCommentTree({
                     parent: comment.id,
-                    kids: comment.kids
+                    kids: comment.kids || []
                   }))}
                 >
                   Показать ответы ({comment.kids.length})

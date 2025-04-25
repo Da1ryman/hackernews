@@ -1,26 +1,29 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   getNewStoriesId,
   getStoriesDetail,
   getComment,
 } from "../api/HackerNewsAPI";
+import { Comment, CommentState, fetchCommentTreeArg } from "../types/comment";
+import { NewsItem, NewsState } from "../types/news";
 
-export const fetchNews = createAsyncThunk("news/fetchNews", async () => {
-  // try {
-  const newsIds = await getNewStoriesId();
-  const newsIteams = await Promise.all(
-    newsIds.map((id) => getStoriesDetail(id))
-  );
-  return newsIteams;
-  // } catch (err) {
-  //   console.log(err);
-  //   return err;
-  // }
+
+
+export const fetchNews = createAsyncThunk<NewsItem[], void>("news/fetchNews", async () => {
+  try {
+    const newsIds = await getNewStoriesId();
+    const newsIteams = await Promise.all(
+      newsIds.map((id: number) => getStoriesDetail(String(id)))
+    );
+    return newsIteams;
+  } catch (err) {
+    throw err;
+  }
 });
 
-export const fetchNewsDetail = createAsyncThunk(
+export const fetchNewsDetail = createAsyncThunk<NewsItem, string>(
   "news/fetchNewsDetail",
-  async (id) => {
+  async (id: string) => {
     try {
       const newsById = await getStoriesDetail(id);
       return newsById;
@@ -30,16 +33,16 @@ export const fetchNewsDetail = createAsyncThunk(
   }
 );
 
-export const fetchComment = createAsyncThunk(
+export const fetchComment = createAsyncThunk<Comment[], string>(
   "comment/fetchComment",
-  async (id) => {
+  async (id: string) => {
     try {
       const news = await getStoriesDetail(id);
       if (!news.kids) {
         return [];
       }
-      const comment = await Promise.all(
-        news.kids.map((commentId) => getComment(commentId))
+      const comment: Comment[] = await Promise.all(
+        news.kids.map((commentId: number) => getComment(String(commentId)))
       );
       return comment;
     } catch (err) {
@@ -48,12 +51,12 @@ export const fetchComment = createAsyncThunk(
   }
 );
 
-export const fetchCommentTree = createAsyncThunk(
+export const fetchCommentTree = createAsyncThunk<{parent: number, comments: Comment[]}, fetchCommentTreeArg>(
   "comment/fetchCommentTree",
   async ({ parent, kids }) => {
     try {
       const comments = await Promise.all(
-        kids.map((commentId) => getComment(commentId))
+        kids.map((commentId) => getComment(String(commentId)))
       );
       return { parent, comments };
     } catch (err) {
@@ -62,24 +65,31 @@ export const fetchCommentTree = createAsyncThunk(
   }
 );
 
+const newsInitialState : NewsState = {
+  newsDetail: null,
+  news: [],
+  loading: true,
+  error: false,
+  loadingDetail: true,
+  reload: false,
+} 
+
 const newsSlice = createSlice({
   name: "news",
-  initialState: {
-    newsDetail: {},
-    news: [],
-    loading: true,
-    error: false,
-    loadingDetail: true,
-  },
+  initialState: newsInitialState,
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchNews.fulfilled, (state, action) => {
+      .addCase(fetchNews.fulfilled, (state, action: PayloadAction<NewsItem[]>) => {
         state.news = action.payload;
         state.loading = false;
+        state.reload = false;
       })
       .addCase(fetchNews.pending, (state) => {
         if (!state.news) {
           state.loading = true;
+        } else {
+          state.reload = true;
         }
       })
       .addCase(fetchNews.rejected, (state, action) => {
@@ -88,7 +98,7 @@ const newsSlice = createSlice({
       });
 
     builder
-      .addCase(fetchNewsDetail.fulfilled, (state, action) => {
+      .addCase(fetchNewsDetail.fulfilled, (state, action: PayloadAction<NewsItem>) => {
         state.newsDetail = action.payload;
         state.loadingDetail = false;
       })
@@ -102,17 +112,19 @@ const newsSlice = createSlice({
   },
 });
 
-const commentSlice = createSlice({
-  name: "comment",
-  initialState: {
+const commentInitialState : CommentState = {
     comments: [],
     commentsTree: [],
     loading: true,
     error: false,
-  },
+}
+
+const commentSlice = createSlice({
+  name: "comment",
+  initialState: commentInitialState,
   extraReducers: (builder) => {
     builder
-      .addCase(fetchComment.fulfilled, (state, action) => {
+      .addCase(fetchComment.fulfilled, (state, action: PayloadAction<Comment[]>) => {
         if (action.payload) {
           state.comments = action.payload;
           state.loading = false;
@@ -126,22 +138,19 @@ const commentSlice = createSlice({
       .addCase(fetchComment.rejected, (state, action) => {
         state.error = true;
         console.log(action.payload);
+      })
+    .addCase(fetchCommentTree.fulfilled, (state, action: PayloadAction<{
+        parent: number;
+        comments: Comment[];
+      }>) => {
+        const { parent, comments } = action.payload;
+        state.commentsTree = state.commentsTree.filter(
+          (tree) => tree.parent !== parent
+        );
+        if (comments.length > 0) {
+          state.commentsTree.push({ parent, comments });
+        }
       });
-
-    builder.addCase(fetchCommentTree.fulfilled, (state, action) => {
-      const { parent, comments } = action.payload;
-
-      state.commentsTree = state.commentsTree.filter(
-        (tree) => tree.parent !== parent
-      );
-
-      if (comments && comments.length > 0) {
-        state.commentsTree.push({
-          parent,
-          comments,
-        });
-      }
-    });
   },
   reducers: {
     removeComment(state) {

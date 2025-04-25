@@ -2,9 +2,10 @@ import { ListGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Loading } from "../another/Loading";
+import { RootState } from "../../store/store";
 
-export const NewsItem = () => {
-  const { news, loading } = useSelector((state) => state.news);
+export const NewsItem: React.FC = () => {
+  const { news, loading } = useSelector((state: RootState) => state.news);
 
   return (
     <>
@@ -22,7 +23,7 @@ export const NewsItem = () => {
           >
             <h2>{stories.title}</h2>
             <p>
-              &#9733;{stories.score} {Date(stories.time)}
+              &#9733;{stories.score} {new Date(stories.time * 1000).toLocaleString()}
             </p>
             Author: {stories.by}
           </ListGroup.Item>
