@@ -9,7 +9,7 @@ const apiConfig = {
 export const getNewStoriesId = async () => {
   try {
     const response = await axios.get(
-      `${apiConfig.url}${apiConfig.allStories}?print=pretty&limitToFirst=100&orderBy=%22$priority%221`
+      `${apiConfig.url}${apiConfig.allStories}?print=pretty&limitToFirst=100&orderBy=%22$priority%22`
     );
     return response.data;
   } catch (err) {
