@@ -6,15 +6,16 @@ import {
 } from "../api/HackerNewsAPI";
 
 export const fetchNews = createAsyncThunk("news/fetchNews", async () => {
-  try {
-    const newsIds = await getNewStoriesId();
-    const newsIteams = await Promise.all(
-      newsIds.map((id) => getStoriesDetail(id))
-    );
-    return newsIteams;
-  } catch (err) {
-    return err;
-  }
+  // try {
+  const newsIds = await getNewStoriesId();
+  const newsIteams = await Promise.all(
+    newsIds.map((id) => getStoriesDetail(id))
+  );
+  return newsIteams;
+  // } catch (err) {
+  //   console.log(err);
+  //   return err;
+  // }
 });
 
 export const fetchNewsDetail = createAsyncThunk(
@@ -24,7 +25,7 @@ export const fetchNewsDetail = createAsyncThunk(
       const newsById = await getStoriesDetail(id);
       return newsById;
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 );
@@ -42,7 +43,7 @@ export const fetchComment = createAsyncThunk(
       );
       return comment;
     } catch (err) {
-      return err;
+      throw err;
     }
   }
 );
@@ -83,6 +84,7 @@ const newsSlice = createSlice({
       })
       .addCase(fetchNews.rejected, (state, action) => {
         state.error = true;
+        console.log(action.payload);
       });
 
     builder
@@ -90,8 +92,12 @@ const newsSlice = createSlice({
         state.newsDetail = action.payload;
         state.loadingDetail = false;
       })
-      .addCase(fetchNewsDetail.pending, (state, action) => {
+      .addCase(fetchNewsDetail.pending, (state) => {
         state.loadingDetail = true;
+      })
+      .addCase(fetchNewsDetail.rejected, (state, action) => {
+        state.error = true;
+        console.log(action.payload);
       });
   },
 });
@@ -102,8 +108,6 @@ const commentSlice = createSlice({
     comments: [],
     commentsTree: [],
     loading: true,
-    error: false,
-    status: {},
   },
   extraReducers: (builder) => {
     builder
@@ -120,7 +124,7 @@ const commentSlice = createSlice({
       })
       .addCase(fetchComment.rejected, (state, action) => {
         state.error = true;
-        state.status = action.payload;
+        console.log(action.payload);
       });
 
     builder.addCase(fetchCommentTree.fulfilled, (state, action) => {
