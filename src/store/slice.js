@@ -108,6 +108,7 @@ const commentSlice = createSlice({
     comments: [],
     commentsTree: [],
     loading: true,
+    error: false,
   },
   extraReducers: (builder) => {
     builder
