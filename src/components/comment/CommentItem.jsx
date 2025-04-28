@@ -27,9 +27,7 @@ export const CommentItem = ({ parentId, depth = 0 }) => {
     ) : null;
   }
 
-  return (
-    <>
-      {currentComments.map((comment) => (
+  return currentComments.map((comment) => (
         <div key={comment.id} style={{ marginLeft: `${depth * 20}px` }}>
           <ListGroup.Item className="p-0 mb-2">
             <p className="p-3">{comment.text}</p>
@@ -58,7 +56,7 @@ export const CommentItem = ({ parentId, depth = 0 }) => {
             <CommentItem parentId={comment.id} depth={depth + 1} />
           )}
         </div>
-      ))}
-    </>
-  );
+      ))
+
+ 
 };

@@ -12,9 +12,7 @@ export const NewsDetail = () => {
   const removeComments = () => dispatch(removeComment())
   
 
-  return (
-    <>
-      {loadingDetail ? (
+  return loadingDetail ? (
         <div className="d-flex justify-content-center m-5">
           <Loading />
         </div>
@@ -44,7 +42,5 @@ export const NewsDetail = () => {
             </div>
           </Card.Body>
         </Card>
-      )}
-    </>
-  );
+      )
 };

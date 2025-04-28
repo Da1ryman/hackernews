@@ -6,9 +6,7 @@ import { Loading } from "../another/Loading";
 export const NewsItem = () => {
   const { news, loading } = useSelector((state) => state.news);
 
-  return (
-    <>
-      {loading ? (
+  return loading ? (
         <div className="text-center">
           <Loading />
         </div>
@@ -29,7 +27,5 @@ export const NewsItem = () => {
             Author: {stories.by}
           </ListGroup.Item>
         ))
-      )}
-    </>
-  );
+      )
 };

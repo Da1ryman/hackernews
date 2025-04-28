@@ -18,16 +18,12 @@ export const NewsPage = () => {
     dispatch(fetchNewsDetail(id));
   }, [dispatch]);
 
-  return (
-    <>
-      {!error ? (
+  return !error ? (
         <Container className="mt-4">
           <NewsDetail />
           <CommentList />
         </Container>
       ) : (
         <Error />
-      )}
-    </>
-  );
+      )
 };

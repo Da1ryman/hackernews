@@ -6,15 +6,11 @@ import { Error } from "../../components/another/Error";
 export const MainPage = () => {
   const error = useSelector((state) => state.news.error);
 
-  return (
-    <>
-      {!error ? (
+  return !error ? (
         <Container>
           <NewsList />
         </Container>
       ) : (
         <Error />
-      )}
-    </>
-  );
+      )
 };
