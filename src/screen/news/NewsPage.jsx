@@ -9,7 +9,7 @@ import { Error } from "../../components/another/Error";
 
 export const NewsPage = () => {
   const dispatch = useDispatch();
-  const { error } = useSelector((state) => state.news);
+  const error = useSelector((state) => state.news.error);
 
   const params = useParams();
   const id = params.id;

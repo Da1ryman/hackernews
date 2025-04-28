@@ -23,6 +23,7 @@ export const CommentList = () => {
       <div className="d-flex justify-content-center m-5">
         <h2 className="mt-4">Комментарии</h2>
       </div>
+      
       {!error ? (
         <ListGroup>
           <CommentItem />

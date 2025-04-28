@@ -19,6 +19,7 @@ export const NewsList = () => {
     <>
       <div className="m-3 d-flex justify-content-between">
         <h1>Список новостей</h1>
+        
         <Button variant="primary" onClick={reloadNews}>
           Обновить список новостей
         </Button>

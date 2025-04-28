@@ -6,16 +6,16 @@ import {
 } from "../api/HackerNewsAPI";
 
 export const fetchNews = createAsyncThunk("news/fetchNews", async () => {
-  // try {
-  const newsIds = await getNewStoriesId();
-  const newsIteams = await Promise.all(
-    newsIds.map((id) => getStoriesDetail(id))
-  );
-  return newsIteams;
-  // } catch (err) {
-  //   console.log(err);
-  //   return err;
-  // }
+  try {
+    const newsIds = await getNewStoriesId();
+    const newsIteams = await Promise.all(
+      newsIds.map((id) => getStoriesDetail(id))
+    );
+
+    return newsIteams;
+  } catch (err) {
+    throw err;
+  }
 });
 
 export const fetchNewsDetail = createAsyncThunk(
@@ -23,6 +23,7 @@ export const fetchNewsDetail = createAsyncThunk(
   async (id) => {
     try {
       const newsById = await getStoriesDetail(id);
+
       return newsById;
     } catch (err) {
       throw err;
@@ -35,13 +36,16 @@ export const fetchComment = createAsyncThunk(
   async (id) => {
     try {
       const news = await getStoriesDetail(id);
+
       if (!news.kids) {
         return [];
       }
-      const comment = await Promise.all(
+
+      const comments = await Promise.all(
         news.kids.map((commentId) => getComment(commentId))
       );
-      return comment;
+
+      return comments;
     } catch (err) {
       throw err;
     }
@@ -55,6 +59,7 @@ export const fetchCommentTree = createAsyncThunk(
       const comments = await Promise.all(
         kids.map((commentId) => getComment(commentId))
       );
+
       return { parent, comments };
     } catch (err) {
       return { parent, comments: [] };
@@ -84,7 +89,7 @@ const newsSlice = createSlice({
       })
       .addCase(fetchNews.rejected, (state, action) => {
         state.error = true;
-        console.log(action.payload);
+        console.error(action.payload);
       });
 
     builder
@@ -97,7 +102,7 @@ const newsSlice = createSlice({
       })
       .addCase(fetchNewsDetail.rejected, (state, action) => {
         state.error = true;
-        console.log(action.payload);
+        console.error(action.payload);
       });
   },
 });
@@ -125,7 +130,7 @@ const commentSlice = createSlice({
       })
       .addCase(fetchComment.rejected, (state, action) => {
         state.error = true;
-        console.log(action.payload);
+        console.error(action.payload);
       });
 
     builder.addCase(fetchCommentTree.fulfilled, (state, action) => {

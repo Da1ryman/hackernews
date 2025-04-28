@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Error } from "../../components/another/Error";
 
 export const MainPage = () => {
-  const { error } = useSelector((state) => state.news);
+  const error = useSelector((state) => state.news.error);
 
   return (
     <>

@@ -21,9 +21,11 @@ export const NewsItem = () => {
             to={`/news/${stories.id}`}
           >
             <h2>{stories.title}</h2>
+
             <p>
               &#9733;{stories.score} {Date(stories.time)}
             </p>
+            
             Author: {stories.by}
           </ListGroup.Item>
         ))

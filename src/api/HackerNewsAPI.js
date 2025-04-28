@@ -11,6 +11,7 @@ export const getNewStoriesId = async () => {
     const response = await axios.get(
       `${apiConfig.url}${apiConfig.allStories}?print=pretty&limitToFirst=100&orderBy=%22$priority%22`
     );
+
     return response.data;
   } catch (err) {
     throw err;
@@ -22,6 +23,7 @@ export const getStoriesDetail = async (id) => {
     const response = await axios.get(
       `${apiConfig.url}${apiConfig.storiesDetail}${id}.json?print=pretty`
     );
+
     return response.data;
   } catch (err) {
     throw err;
@@ -33,6 +35,7 @@ export const getComment = async (id) => {
     const response = await axios.get(
       `${apiConfig.url}${apiConfig.storiesDetail}${id}.json?print=pretty`
     );
+
     return response.data;
   } catch (err) {
     throw err;

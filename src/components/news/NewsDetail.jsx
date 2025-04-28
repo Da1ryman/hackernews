@@ -8,6 +8,8 @@ export const NewsDetail = () => {
   const dispatch = useDispatch();
 
   const { newsDetail, loadingDetail } = useSelector((state) => state.news);
+
+  const removeComments = () => dispatch(removeComment())
   
 
   return (
@@ -21,17 +23,21 @@ export const NewsDetail = () => {
           <Card.Header>
             <Card.Title className="text-center">{newsDetail.title}</Card.Title>
           </Card.Header>
+
           <Card.Body>
             <Card.Text>{newsDetail.by}</Card.Text>
+
             <Card.Text>{Date(newsDetail.time)}</Card.Text>
+
             <div className="d-flex justify-content-between ">
               <Button as={Link} to={newsDetail.url}>
                 Посмотреть новость
               </Button>
+
               <Button
                 as={Link}
                 to="/"
-                onClick={() => dispatch(removeComment())}
+                onClick={removeComments}
               >
                 Вернуться к новостям
               </Button>
