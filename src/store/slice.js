@@ -1,38 +1,42 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   getNewStoriesId,
   getStoriesDetail,
   getComment,
-} from "../api/HackerNewsAPI";
+} from '../api/HackerNewsAPI';
 
-export const fetchNews = createAsyncThunk("news/fetchNews", async () => {
+export const fetchNews = createAsyncThunk('news/fetchNews', async () => {
   try {
     const newsIds = await getNewStoriesId();
     const newsIteams = await Promise.all(
-      newsIds.map((id) => getStoriesDetail(id))
+      newsIds.map((id) => getStoriesDetail(id)),
     );
 
     return newsIteams;
   } catch (err) {
+    console.error(err);
+
     throw err;
   }
 });
 
 export const fetchNewsDetail = createAsyncThunk(
-  "news/fetchNewsDetail",
+  'news/fetchNewsDetail',
   async (id) => {
     try {
       const newsById = await getStoriesDetail(id);
 
       return newsById;
     } catch (err) {
+      console.error(err);
+
       throw err;
     }
-  }
+  },
 );
 
 export const fetchComment = createAsyncThunk(
-  "comment/fetchComment",
+  'comment/fetchComment',
   async (id) => {
     try {
       const news = await getStoriesDetail(id);
@@ -42,33 +46,37 @@ export const fetchComment = createAsyncThunk(
       }
 
       const comments = await Promise.all(
-        news.kids.map((commentId) => getComment(commentId))
+        news.kids.map((commentId) => getComment(commentId)),
       );
 
       return comments;
     } catch (err) {
+      console.error(err);
+
       throw err;
     }
-  }
+  },
 );
 
 export const fetchCommentTree = createAsyncThunk(
-  "comment/fetchCommentTree",
+  'comment/fetchCommentTree',
   async ({ parent, kids }) => {
     try {
       const comments = await Promise.all(
-        kids.map((commentId) => getComment(commentId))
+        kids.map((commentId) => getComment(commentId)),
       );
 
       return { parent, comments };
     } catch (err) {
+      console.error(err);
+
       return { parent, comments: [] };
     }
-  }
+  },
 );
 
 const newsSlice = createSlice({
-  name: "news",
+  name: 'news',
   initialState: {
     newsDetail: {},
     news: [],
@@ -87,9 +95,8 @@ const newsSlice = createSlice({
           state.loading = true;
         }
       })
-      .addCase(fetchNews.rejected, (state, action) => {
+      .addCase(fetchNews.rejected, (state) => {
         state.error = true;
-        console.error(action.payload);
       });
 
     builder
@@ -100,15 +107,14 @@ const newsSlice = createSlice({
       .addCase(fetchNewsDetail.pending, (state) => {
         state.loadingDetail = true;
       })
-      .addCase(fetchNewsDetail.rejected, (state, action) => {
+      .addCase(fetchNewsDetail.rejected, (state) => {
         state.error = true;
-        console.error(action.payload);
       });
   },
 });
 
 const commentSlice = createSlice({
-  name: "comment",
+  name: 'comment',
   initialState: {
     comments: [],
     commentsTree: [],
@@ -128,16 +134,15 @@ const commentSlice = createSlice({
           state.loading = true;
         }
       })
-      .addCase(fetchComment.rejected, (state, action) => {
+      .addCase(fetchComment.rejected, (state) => {
         state.error = true;
-        console.error(action.payload);
       });
 
     builder.addCase(fetchCommentTree.fulfilled, (state, action) => {
       const { parent, comments } = action.payload;
 
       state.commentsTree = state.commentsTree.filter(
-        (tree) => tree.parent !== parent
+        (tree) => tree.parent !== parent,
       );
 
       if (comments && comments.length > 0) {

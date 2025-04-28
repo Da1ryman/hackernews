@@ -1,10 +1,10 @@
-import { ListGroup } from "react-bootstrap";
-import { CommentItem } from "./CommentItem";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { fetchComment, removeComment } from "../../store/slice";
-import { useEffect } from "react";
-import { Error } from "../another/Error";
+import { ListGroup } from 'react-bootstrap';
+import { CommentItem } from './CommentItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { fetchComment, removeComment } from '../../store/slice';
+import { useEffect } from 'react';
+import { Error } from '../another/Error';
 
 export const CommentList = () => {
   const params = useParams().id;
@@ -20,10 +20,10 @@ export const CommentList = () => {
 
   return (
     <>
-      <div className="d-flex justify-content-center m-5">
-        <h2 className="mt-4">Комментарии</h2>
+      <div className='d-flex justify-content-center m-5'>
+        <h2 className='mt-4'>Комментарии</h2>
       </div>
-      
+
       {!error ? (
         <ListGroup>
           <CommentItem />

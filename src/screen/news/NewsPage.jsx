@@ -1,11 +1,11 @@
-import { Container } from "react-bootstrap";
-import { NewsDetail } from "../../components/news/NewsDetail";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchNewsDetail } from "../../store/slice";
-import { useEffect } from "react";
-import { CommentList } from "../../components/comment/CommentList";
-import { useParams } from "react-router-dom";
-import { Error } from "../../components/another/Error";
+import { Container } from 'react-bootstrap';
+import { NewsDetail } from '../../components/news/NewsDetail';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchNewsDetail } from '../../store/slice';
+import { useEffect } from 'react';
+import { CommentList } from '../../components/comment/CommentList';
+import { useParams } from 'react-router-dom';
+import { Error } from '../../components/another/Error';
 
 export const NewsPage = () => {
   const dispatch = useDispatch();
@@ -19,11 +19,11 @@ export const NewsPage = () => {
   }, [dispatch]);
 
   return !error ? (
-        <Container className="mt-4">
-          <NewsDetail />
-          <CommentList />
-        </Container>
-      ) : (
-        <Error />
-      )
+    <Container className='mt-4'>
+      <NewsDetail />
+      <CommentList />
+    </Container>
+  ) : (
+    <Error />
+  );
 };
