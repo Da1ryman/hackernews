@@ -1,63 +1,66 @@
-import { Button, ListGroup } from "react-bootstrap"
-import { useDispatch, useSelector } from "react-redux"
-import { fetchCommentTree } from "../../store/commentSlice";
+import { Button, ListGroup } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCommentTree } from '../../store/slice';
+import { Loading } from '../another/Loading';
 
+export const CommentItem = ({ parentId, depth = 0 }) => {
+  const dispatch = useDispatch();
+  const { comments, loading, commentsTree } = useSelector(
+    (state) => state.comment,
+  );
 
-const CommentItem = () => {
-    
-    const dispatch = useDispatch();
-    const { comment, commentTree, loading } = useSelector(state => state.comment);
+  const currentComments = parentId
+    ? commentsTree.find((tree) => tree.parent === parentId)?.comments || []
+    : comments;
 
+  if (loading && !parentId) {
     return (
-        <>
-            {comment.map((comments) => (
-                <>
-                    <ListGroup.Item key={comments.id} className="p-0" >
-                        
-                        <p className="p-3"> 
-                            {comments.text}
-                        </p>
-                        <div className="border rounded-1 d-flex justify-content-between">
-                            <p className="m-0 ms-3">
-                                author: {comments.by}
-                            </p>
-                            <p className="m-0 me-3">
-                                date: {Date(comments.time)}
-                            </p>
-                            <Button onClick={() => dispatch(fetchCommentTree(comments.id))}>
-                                Комментарии
-                            </Button>
-                        </div>
-                        
-                    </ListGroup.Item>
-                    {!commentTree ? null : commentTree[0].parent == comments.id ?  commentTree.map((commentsTree) => (
-                        <>
-                            <ListGroup className="ms-4 me-4" key={commentsTree.id}> 
-                                <ListGroup.Item key={commentsTree.id} className="p-0">
-                                
-                                    <p className="p-3"> 
-                                        {commentsTree.text}
-                                    </p>
-                                    <div className="border rounded-1 d-flex justify-content-between">
-                                        <p className="m-0 ms-3">
-                                            author: {commentsTree.by}
-                                        </p>
-                                        <p className="m-0 me-3">
-                                            date: {Date(commentsTree.time)}
-                                        </p>
-                                    </div>
-                                </ListGroup.Item>
-                            </ListGroup>
-                        </>
-                        
-                        
-                    ))  :
-                    null
-                }             
-                </>
-            ))}
-        </>
-    )
-}
+      <div className='d-flex justify-content-center m-5'>
+        <Loading />
+      </div>
+    );
+  }
 
-export default CommentItem;
+  if (!currentComments || currentComments.length === 0) {
+    return !parentId ? (
+      <div className='d-flex justify-content-center m-5'>
+        <p>Комментариев нет</p>
+      </div>
+    ) : null;
+  }
+
+  return currentComments.map((comment) => (
+    <div key={comment.id} style={{ marginLeft: `${depth * 20}px` }}>
+      <ListGroup.Item className='p-0 mb-2'>
+        <p className='p-3'>{comment.text}</p>
+
+        <div className='border rounded-1 d-flex justify-content-between'>
+          <p className='m-0 ms-3'>author: {comment.by}</p>
+
+          <p className='m-0 me-3'>
+            date: {new Date(comment.time * 1000).toLocaleString()}
+          </p>
+
+          {comment.kids && (
+            <Button
+              onClick={() =>
+                dispatch(
+                  fetchCommentTree({
+                    parent: comment.id,
+                    kids: comment.kids,
+                  }),
+                )
+              }
+            >
+              Показать ответы ({comment.kids.length})
+            </Button>
+          )}
+        </div>
+      </ListGroup.Item>
+
+      {commentsTree.some((tree) => tree.parent === comment.id) && (
+        <CommentItem parentId={comment.id} depth={depth + 1} />
+      )}
+    </div>
+  ));
+};

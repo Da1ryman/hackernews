@@ -1,13 +1,16 @@
-import { Container } from "react-bootstrap"
-import NewsList from "../../components/news/NewsList";
+import { Container } from 'react-bootstrap';
+import { NewsList } from '../../components/news/NewsList';
+import { useSelector } from 'react-redux';
+import { Error } from '../../components/another/Error';
 
-const MainPage = () => {
+export const MainPage = () => {
+  const error = useSelector((state) => state.news.error);
 
-    return (
-        <Container >
-            <NewsList/>
-        </Container>
-    )
-}
-
-export default MainPage;
+  return !error ? (
+    <Container>
+      <NewsList />
+    </Container>
+  ) : (
+    <Error />
+  );
+};

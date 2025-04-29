@@ -1,25 +1,29 @@
-import { Container } from "react-bootstrap"
-import NewsDetail from "../../components/news/NewsDetail";
-import { useDispatch } from "react-redux";
-import { fetchNews } from "../../store/newsSlice";
-import { useEffect } from "react";
-import CommentList from "../../components/comment/CommentList";
+import { Container } from 'react-bootstrap';
+import { NewsDetail } from '../../components/news/NewsDetail';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchNewsDetail } from '../../store/slice';
+import { useEffect } from 'react';
+import { CommentList } from '../../components/comment/CommentList';
+import { useParams } from 'react-router-dom';
+import { Error } from '../../components/another/Error';
 
+export const NewsPage = () => {
+  const dispatch = useDispatch();
+  const error = useSelector((state) => state.news.error);
 
-const NewsPage = () => {
-    const dispatch = useDispatch()
-    
+  const params = useParams();
+  const id = params.id;
 
-    useEffect(() => {
-        dispatch(fetchNews())
-    }, [dispatch])
+  useEffect(() => {
+    dispatch(fetchNewsDetail(id));
+  }, [dispatch]);
 
-    return (
-        <Container className="mt-4">
-            <NewsDetail/>
-            <CommentList />
-        </Container>
-    )
-}
-
-export default NewsPage;
+  return !error ? (
+    <Container className='mt-4'>
+      <NewsDetail />
+      <CommentList />
+    </Container>
+  ) : (
+    <Error />
+  );
+};

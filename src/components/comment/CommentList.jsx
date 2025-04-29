@@ -1,29 +1,37 @@
-import { ListGroup } from "react-bootstrap"
-import CommentItem from "./CommentItem";
-import { useDispatch} from "react-redux";
-import { useParams } from "react-router-dom";
-import { fetchComment } from "../../store/commentSlice";
-import { useEffect } from "react";
+import { ListGroup } from 'react-bootstrap';
+import { CommentItem } from './CommentItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { fetchComment, removeComment } from '../../store/slice';
+import { useEffect } from 'react';
+import { Error } from '../another/Error';
 
+export const CommentList = () => {
+  const params = useParams().id;
+  const dispatch = useDispatch();
+  const { error } = useSelector((state) => state.comment);
 
-const CommentList = () => {
-    const params = useParams().id
-    const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchComment(params));
 
-    useEffect(() => {
-        dispatch(fetchComment(params))
-    }, [dispatch])
+    return () => {
+      dispatch(removeComment());
+    };
+  }, [dispatch, params]);
 
-    return (
-        <>
-            <h2 className="mt-4">
-                Комментарии
-            </h2>
-            <ListGroup>
-                <CommentItem/>
-            </ListGroup>
-        </>
-    )
-}
+  return (
+    <>
+      <div className='d-flex justify-content-center m-5'>
+        <h2 className='mt-4'>Комментарии</h2>
+      </div>
 
-export default CommentList;
+      {!error ? (
+        <ListGroup>
+          <CommentItem />
+        </ListGroup>
+      ) : (
+        <Error />
+      )}
+    </>
+  );
+};
