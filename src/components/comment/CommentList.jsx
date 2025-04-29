@@ -13,6 +13,7 @@ export const CommentList = () => {
 
   useEffect(() => {
     dispatch(fetchComment(params));
+
     return () => {
       dispatch(removeComment());
     };
