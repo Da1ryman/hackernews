@@ -1,6 +1,6 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { newsReducer, commentReducer, fetchNews } from "./slice";
-import { useDispatch } from "react-redux";
+import { configureStore } from '@reduxjs/toolkit';
+import { newsReducer, commentReducer, fetchNews } from './slice';
+import { useDispatch } from 'react-redux';
 
 export const store = configureStore({
   reducer: {

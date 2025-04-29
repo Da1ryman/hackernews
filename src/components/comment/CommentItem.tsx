@@ -4,6 +4,7 @@ import { fetchCommentTree } from '../../store/slice';
 import { Loading } from '../another/Loading';
 import { Comment, CommentItemProps } from '../../types/comment';
 import { RootState, useAppDispatch } from '../../store/store';
+import React from 'react';
 
 export const CommentItem: React.FC<CommentItemProps> = ({
   parentId,
@@ -34,38 +35,44 @@ export const CommentItem: React.FC<CommentItemProps> = ({
     ) : null;
   }
 
-  return currentComments.map((comment: Comment) => (
-    <div key={comment.id} style={{ marginLeft: `${depth * 20}px` }}>
-      <ListGroup.Item className='p-0 mb-2'>
-        <p className='p-3'>{comment.text}</p>
+  return (
+    <>
+      {currentComments.map((comment: Comment) => (
+        <React.Fragment key={comment.id}>
+          <div style={{ marginLeft: `${depth * 20}px` }}>
+            <ListGroup.Item className='p-0 mb-2'>
+              <p className='p-3'>{comment.text}</p>
 
-        <div className='border rounded-1 d-flex justify-content-between'>
-          <p className='m-0 ms-3'>author: {comment.by}</p>
+              <div className='border rounded-1 d-flex justify-content-between'>
+                <p className='m-0 ms-3'>author: {comment.by}</p>
 
-          <p className='m-0 me-3'>
-            date: {new Date(comment.time * 1000).toLocaleString()}
-          </p>
+                <p className='m-0 me-3'>
+                  date: {new Date(comment.time * 1000).toLocaleString()}
+                </p>
 
-          {comment.kids && (
-            <Button
-              onClick={() =>
-                dispatch(
-                  fetchCommentTree({
-                    parent: comment.id,
-                    kids: comment.kids || [],
-                  }),
-                )
-              }
-            >
-              Показать ответы ({comment.kids.length})
-            </Button>
-          )}
-        </div>
-      </ListGroup.Item>
+                {comment.kids && (
+                  <Button
+                    onClick={() =>
+                      dispatch(
+                        fetchCommentTree({
+                          parent: comment.id,
+                          kids: comment.kids || [],
+                        }),
+                      )
+                    }
+                  >
+                    Показать ответы ({comment.kids.length})
+                  </Button>
+                )}
+              </div>
+            </ListGroup.Item>
 
-      {commentsTree.some((tree) => tree.parent === comment.id) && (
-        <CommentItem parentId={comment.id} depth={depth + 1} />
-      )}
-    </div>
-  ));
+            {commentsTree.some((tree) => tree.parent === comment.id) && (
+              <CommentItem parentId={comment.id} depth={depth + 1} />
+            )}
+          </div>
+        </React.Fragment>
+      ))}
+    </>
+  );
 };
