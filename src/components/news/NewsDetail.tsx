@@ -1,5 +1,5 @@
 import { Button, Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Loading } from '../another/Loading';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { removeComment } from '../../store/commentslice/slice';
@@ -7,8 +7,14 @@ import { removeComment } from '../../store/commentslice/slice';
 export const NewsDetail = () => {
   const dispatch = useAppDispatch();
   const removeComments = () => dispatch(removeComment());
+  const navigate = useNavigate();
 
   const { newsDetail, loadingDetail } = useAppSelector((state) => state.news);
+
+  const navigation = (url: string) => {
+    removeComments();
+    navigate(url);
+  };
 
   if (loadingDetail) {
     return (
@@ -36,13 +42,9 @@ export const NewsDetail = () => {
         </Card.Text>
 
         <div className='d-flex justify-content-between '>
-          <Button as={Link as any} to={newsDetail.url}>
-            Посмотреть новость
-          </Button>
+          <Button href={newsDetail.url}>Посмотреть новость</Button>
 
-          <Button as={Link as any} to='/' onClick={removeComments}>
-            Вернуться к новостям
-          </Button>
+          <Button onClick={() => navigation('/')}>Вернуться к новостям</Button>
         </div>
       </Card.Body>
     </Card>

@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { NewsItem } from '../types/news';
+import { Comment } from '../types/comment';
 
 const apiConfig = {
   url: 'https://hacker-news.firebaseio.com/',
@@ -7,7 +9,7 @@ const apiConfig = {
 };
 
 export const getNewStoriesId = async () => {
-  const response = await axios.get(
+  const response = await axios.get<number[]>(
     `${apiConfig.url}${apiConfig.allStories}?print=pretty&limitToFirst=100&orderBy=%22$priority%22`,
   );
 
@@ -15,7 +17,7 @@ export const getNewStoriesId = async () => {
 };
 
 export const getStoriesDetail = async (id: string) => {
-  const response = await axios.get(
+  const response = await axios.get<NewsItem>(
     `${apiConfig.url}${apiConfig.storiesDetail}${id}.json?print=pretty`,
   );
 
@@ -23,7 +25,7 @@ export const getStoriesDetail = async (id: string) => {
 };
 
 export const getComment = async (id: string) => {
-  const response = await axios.get(
+  const response = await axios.get<Comment>(
     `${apiConfig.url}${apiConfig.storiesDetail}${id}.json?print=pretty`,
   );
 

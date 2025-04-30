@@ -5,7 +5,7 @@ export const fetchNews = createAsyncThunk('news/fetchNews', async () => {
   try {
     const newsIds = await getNewStoriesId();
     const newsIteams = await Promise.all(
-      newsIds.map((id: number) => getStoriesDetail(String(id))),
+      newsIds.map((id) => getStoriesDetail(String(id))),
     );
 
     return newsIteams;
