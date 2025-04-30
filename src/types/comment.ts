@@ -9,10 +9,7 @@ export interface Comment {
 
 export interface CommentState {
   comments: Comment[];
-  commentsTree: Array<{
-    parent: number;
-    comments: Comment[];
-  }>;
+  commentsTree: Array<commentsTree>;
   loading: boolean;
   error: boolean;
 }
@@ -22,7 +19,12 @@ export interface fetchCommentTreeArg {
   kids: number[];
 }
 
+export interface commentsTree {
+  parent: number;
+  comments: Comment[];
+}
+
 export interface CommentItemProps {
   parentId?: number;
-  depth?: number; 
+  depth?: number;
 }

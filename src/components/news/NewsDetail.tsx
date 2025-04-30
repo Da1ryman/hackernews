@@ -1,17 +1,14 @@
 import { Button, Card } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Loading } from '../another/Loading';
 import { removeComment } from '../../store/slice';
-import { RootState } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 
 export const NewsDetail = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const removeComments = () => dispatch(removeComment());
 
-  const { newsDetail, loadingDetail } = useSelector(
-    (state: RootState) => state.news,
-  );
+  const { newsDetail, loadingDetail } = useAppSelector((state) => state.news);
 
   if (loadingDetail) {
     return (
@@ -26,30 +23,28 @@ export const NewsDetail = () => {
   }
 
   return (
-    <>
-      <Card>
-        <Card.Header>
-          <Card.Title className='text-center'>{newsDetail.title}</Card.Title>
-        </Card.Header>
+    <Card>
+      <Card.Header>
+        <Card.Title className='text-center'>{newsDetail.title}</Card.Title>
+      </Card.Header>
 
-        <Card.Body>
-          <Card.Text>{newsDetail.by}</Card.Text>
+      <Card.Body>
+        <Card.Text>{newsDetail.by}</Card.Text>
 
-          <Card.Text>
-            {new Date(newsDetail.time * 1000).toLocaleString()}
-          </Card.Text>
+        <Card.Text>
+          {new Date(newsDetail.time * 1000).toLocaleString()}
+        </Card.Text>
 
-          <div className='d-flex justify-content-between '>
-            <Button as={Link as any} to={newsDetail.url}>
-              Посмотреть новость
-            </Button>
+        <div className='d-flex justify-content-between '>
+          <Button as={Link as any} to={newsDetail.url}>
+            Посмотреть новость
+          </Button>
 
-            <Button as={Link as any} to='/' onClick={removeComments}>
-              Вернуться к новостям
-            </Button>
-          </div>
-        </Card.Body>
-      </Card>
-    </>
+          <Button as={Link as any} to='/' onClick={removeComments}>
+            Вернуться к новостям
+          </Button>
+        </div>
+      </Card.Body>
+    </Card>
   );
 };
