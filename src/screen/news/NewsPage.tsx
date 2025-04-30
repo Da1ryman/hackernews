@@ -5,7 +5,7 @@ import { CommentList } from '../../components/comment/CommentList';
 import { useParams } from 'react-router-dom';
 import { Error } from '../../components/another/Error';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { fetchNewsDetail } from '../../store/action';
+import { fetchNewsDetail } from '../../store/newsslice/action';
 
 export const NewsPage = () => {
   const dispatch = useAppDispatch();

@@ -3,7 +3,7 @@ import { NewsItem } from './NewsItem';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { Loading } from '../another/Loading';
-import { fetchNews } from '../../store/action';
+import { fetchNews } from '../../store/newsslice/action';
 
 export const NewsList: React.FC = () => {
   const dispatch = useAppDispatch();

@@ -2,7 +2,7 @@ import { Button, ListGroup } from 'react-bootstrap';
 import { Loading } from '../another/Loading';
 import { Comment, CommentItemProps, commentsTree } from '../../types/comment';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { fetchCommentTree } from '../../store/action';
+import { fetchCommentTree } from '../../store/commentslice/action';
 
 export const CommentItem = ({ parentId, depth = 0 }: CommentItemProps) => {
   const dispatch = useAppDispatch();

@@ -1,8 +1,8 @@
 import { Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Loading } from '../another/Loading';
-import { removeComment } from '../../store/slice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
+import { removeComment } from '../../store/commentslice/slice';
 
 export const NewsDetail = () => {
   const dispatch = useAppDispatch();
