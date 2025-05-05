@@ -11,7 +11,7 @@ export const NewsDetail = () => {
 
   const { newsDetail, loadingDetail } = useAppSelector((state) => state.news);
 
-  const navigation = (url: string) => {
+  const handleNavigation = (url: string) => {
     removeComments();
     navigate(url);
   };
@@ -44,7 +44,9 @@ export const NewsDetail = () => {
         <div className='d-flex justify-content-between '>
           <Button href={newsDetail.url}>Посмотреть новость</Button>
 
-          <Button onClick={() => navigation('/')}>Вернуться к новостям</Button>
+          <Button onClick={() => handleNavigation('/')}>
+            Вернуться к новостям
+          </Button>
         </div>
       </Card.Body>
     </Card>
