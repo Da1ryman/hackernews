@@ -8,7 +8,7 @@ const apiConfig = {
   storiesDetail: 'v0/item/',
 };
 
-export const getNewStoriesId = async (): Promise<number[]> => {
+export const getNewStoriesId = async () => {
   const response = await axios.get<number[]>(
     `${apiConfig.url}${apiConfig.allStories}?print=pretty&limitToFirst=100&orderBy=%22$priority%22`,
   );
@@ -16,7 +16,7 @@ export const getNewStoriesId = async (): Promise<number[]> => {
   return response.data;
 };
 
-export const getStoriesDetail = async (id: string): Promise<NewsItem> => {
+export const getStoriesDetail = async (id: string) => {
   const response = await axios.get<NewsItem>(
     `${apiConfig.url}${apiConfig.storiesDetail}${id}.json?print=pretty`,
   );
@@ -24,7 +24,7 @@ export const getStoriesDetail = async (id: string): Promise<NewsItem> => {
   return response.data;
 };
 
-export const getComment = async (id: string): Promise<Comment> => {
+export const getComment = async (id: string) => {
   const response = await axios.get<Comment>(
     `${apiConfig.url}${apiConfig.storiesDetail}${id}.json?print=pretty`,
   );

@@ -1,11 +1,10 @@
 import { ListGroup } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Loading } from '../another/Loading';
-import { RootState } from '../../store/store';
+import { useAppSelector } from '../../store/store';
 
 export const NewsItem = () => {
-  const { news, loading } = useSelector((state: RootState) => state.news);
+  const { news, loading } = useAppSelector((state) => state.news);
 
   return loading ? (
     <div className='text-center'>

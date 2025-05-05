@@ -1,20 +1,20 @@
 import { Button, ListGroup } from 'react-bootstrap';
 import { NewsItem } from './NewsItem';
-import { fetchNews } from '../../store/slice';
 import { useEffect } from 'react';
-import { RootState, useAppDispatch } from '../../store/store';
-import { useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import { Loading } from '../another/Loading';
+import { fetchNews } from '../../store/newsslice/action';
 
 export const NewsList: React.FC = () => {
   const dispatch = useAppDispatch();
   const reloadNews = () => dispatch(fetchNews());
-  const { reload } = useSelector((state: RootState) => state.news);
+  const reload = useAppSelector((state) => state.news.reload);
 
   useEffect(() => {
     const interval = setInterval(() => {
       reloadNews();
     }, 60000);
+
     return () => clearInterval(interval);
   }, [dispatch]);
 

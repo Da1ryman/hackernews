@@ -1,16 +1,16 @@
 import { ListGroup } from 'react-bootstrap';
 import { CommentItem } from './CommentItem';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchComment, removeComment } from '../../store/slice';
 import { useEffect } from 'react';
 import { Error } from '../another/Error';
-import { RootState, useAppDispatch } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { fetchComment } from '../../store/commentslice/action';
+import { removeComment } from '../../store/commentslice/slice';
 
 export const CommentList = () => {
   const id = useParams().id;
   const dispatch = useAppDispatch();
-  const { error, comments } = useSelector((state: RootState) => state.comment);
+  const { error, comments } = useAppSelector((state) => state.comment);
 
   useEffect(() => {
     dispatch(fetchComment(String(id)));
